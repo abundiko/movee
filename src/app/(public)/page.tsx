@@ -9,9 +9,7 @@ export default function Home() {
   async function getMovies() {
     // const data = await fetchMovies("max-results=8");
     // setList(data);
-    const response = await fetch(
-      `https://cors-anywhere.herokuapp.com/https://fzmovies.ng/search?max-results=8`
-    );
+    const response = await fetch(`https://fzmovies.ng/search?max-results=8`);
     const data = await response.text();
     console.log(data);
   }
