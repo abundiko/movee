@@ -5,57 +5,81 @@ import { useEffect, useRef, useState } from "react";
 
 export default function Home() {
   const [list, setList] = useState<MovieCardProps[]>([]);
-  const fetchCount = useRef(12);
+  const hasFetched = useRef(false);
+  const inputField = useRef<HTMLInputElement>(null);
+  const [keyword, setKeyword] = useState("");
 
-  useEffect(() => {
-    // listen for scroll near bottom and fetch more
-    function onScroll() {
-      const offset = window.scrollY;
-      //get body scroll height
-      const bodyScrollHeight = document.body.scrollHeight;
-      // rest of the code
-      if (offset + window.innerHeight >= bodyScrollHeight) {
-        getMovies(12);
-      }
-    }
-    window.addEventListener("scroll", onScroll);
+  const loadMore = async (e: any) => {
+    e.target.setAttribute("disabled", "true");
+    hasFetched.current = false;
+    await getMovies(
+      `updated-max=${list[list.length - 1].datetime
+        .raw}&max-results=24&start=${list.length}&by-date=false&m=1`
+    );
+    e.target.removeAttribute("disabled");
+  };
 
-    // rest of the code
+  useEffect(
+    () => {
+      if (!hasFetched.current) getMovies(
+        "max-results=24"
+      );
+    },
+    [list, hasFetched, keyword]
+  );
 
-    getMovies();
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  async function getMovies(count = 0) {
+  async function getMovies(query = "") {
     const response = await fetch("/api/movies", {
       method: "post",
       body: JSON.stringify({
-        query: `updated-max=2023-10-26T06:47:00-07:00&max-results=12&start=${count}&by-date=false&m=1`
-        // query: `max-results=12&by-date=false&start=12&by-date=false`
-        // query: `updated-max=2023-10-25T02:38:00-07:00&max-results=12&start=14&by-date=false`
+        query: `${keyword!=""?"q="+keyword+"&":""}${query}`
       })
     });
     const data = await response.json();
-    if (data.success) {
-      if (!list[0] || list[0].title != data.data[0].title)
-        setList(old => {
-          return [...old, ...data.data];
-        });
+    if (data.success && hasFetched.current == false) {
+      setList(old => {
+        return [...old, ...data.data];
+      });
     }
+    hasFetched.current = true;
     console.log(data);
   }
 
-  return (
-    <main>
+  return <main>
+      <header className="py-6 px-[10vw] flex justify-between gap-2 max-[500px]:flex-col">
+        <h1 className="font-bold text-2xl md:text-4xl">Moviee</h1>
+        <div className="flex w-fit max-w-full rounded-3xl border p-1">
+          <input ref={inputField} onKeyUp={()=>setKeyword(inputField.current?.value ?? "")} type="text" name="" id="" className="bg-transparent outline-none border-none px-3" placeholder="Search Moviees" />
+          <button
+          onClick={()=>{
+            
+            if(keyword.trim() !== ""){
+              setList([]);
+    hasFetched.current = false;
+              getMovies();
+            }
+          }}
+           className="aspect-square inline-flex rounded-full bg-yellow-500 text-black items-center justify-center w-8 md:w-12">
+            &gt;
+          </button>
+        </div>
+      </header>
       <section className="py-10">
-        <div className="px-4 md:px-8 lg:px-10 flex flex-wrap">
+        <div className="px-4 md:px-8 lg:px-12 flex flex-wrap">
           {list.map((movie, i) =>
             <div key={i} className="w-6/12 md:w-4/12 lg:w-3/12 p-1 sm:p-3">
               <MovieCard {...movie} />
             </div>
           )}
+          <div className="w-full my-10 flex justify-center">
+            {
+              list.length % 24 == 0 &&
+              <button onClick={loadMore} className="inline-block px-7 py-2 bg-yellow-500 text-black rounded-lg disabled:opacity-50">
+              Load More
+            </button>
+            }
+          </div>
         </div>
       </section>
-    </main>
-  );
+    </main>;
 }

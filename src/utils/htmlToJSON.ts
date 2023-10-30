@@ -38,7 +38,13 @@ export default async function cardHTMLToJSON(htmlString: string) {
 export async function detailHTMLToJSON(htmlString: string) {
   const $ = load(htmlString);
   const articles: object[] = [];
-
+  let trailer: string | undefined = "";
+  $("div.html5-video-player").each(function() {
+    const article = $(this);
+    trailer = article
+      .find('a[data-sessionlink="feature=player-title"]')
+      .attr("href");
+  });
   // Find all <article> elements and loop through them
   $("div.post-inner-area").each(function() {
     const article = $(this);
@@ -64,6 +70,7 @@ export async function detailHTMLToJSON(htmlString: string) {
       imgUrl,
       title,
       desc,
+      trailer,
       datetime: {
         raw: datetimeRaw,
         string: datetimeString
