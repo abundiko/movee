@@ -168,6 +168,7 @@ export async function netnaijaDetailHTMLToJSON(htmlString: string) {
       imgUrl,
       title,
       desc,
+      meta,
       trailer,
       datetime: {
         raw: datetimeRaw,
