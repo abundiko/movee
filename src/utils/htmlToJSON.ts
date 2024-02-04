@@ -50,7 +50,7 @@ export async function netnaijaCardHTMLToJSON(htmlString: string) {
     const imgUrl = netUrl+article
       .find("img.wp-post-image")
       .attr("src");
-    const title = article.find("h2.post-title>a").text();
+    const title = article.find("h2.post-title>a, h3.post-title>a").text();
     const datetimeString = article.find("span.date").text();
     const datetimeRaw = article
       .find("span.post-date.published")
@@ -144,6 +144,14 @@ export async function netnaijaDetailHTMLToJSON(htmlString: string) {
       .split(':')[0] ?? '';
     const datetimeString = article.find(".single-post-meta.post-meta>date.meta-item.tie-icon").text();
     const desc = article
+      .find(
+        ".entry-content.entry.clearfix>p:nth-of-type(1), .entry-content.entry.clearfix>p:nth-of-type(2)"
+      )
+      .text()
+      .replaceAll('<p>','')
+      .replaceAll('</p>','\n')
+      ;
+    const meta = article
       .find(
         "blockquote.wp-block-quote"
       )
