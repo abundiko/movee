@@ -38,13 +38,13 @@ export default async function Page({ params }: { params: { id: string | string[]
       },
     });
     const html = await req.text();
-    writeFileSync("./eg.html", html);
+    // writeFileSync("./eg.html", html);
 
     const link = await downloadHTMLToJSON(html);
     htmlValue = embedIdInHTML(link);
   } catch (error) {
     console.error(error);
-    return new Response("", { status: 404, statusText: "file not found" });
+    htmlValue = "something went wrong"
   }
 
   return (
