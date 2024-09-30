@@ -17,7 +17,7 @@ export type AwaMovie = {
   postedAt: string;
 };
 
-function objectFromParams<T>(p: URLSearchParams) {
+export function objectFromParams<T>(p: URLSearchParams) {
   const entries = p.entries() as unknown as [string, string];
   const obj: any = {};
   for (const [key, value] of entries) {
@@ -43,6 +43,6 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     console.error(error);
 
-    return NextResponse.json({ error });
+    return NextResponse.json({ error: "Something went wrong" });
   }
 }
