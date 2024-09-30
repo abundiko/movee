@@ -32,7 +32,7 @@ const HOST = "https://www.awafim.tv/browse";
 export async function GET(req: NextRequest) {
   const url = new URL(req.url);
   const searchParams = objectFromParams<Params>(url.searchParams);
-  const pageQuery = searchParams.page ? `/${searchParams.page}` : "";
+  const pageQuery = searchParams.page ? `/page/${searchParams.page}` : "";
 
   try {
     const data = await fetch(HOST + pageQuery + buildUrlQuery(searchParams));
