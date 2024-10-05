@@ -1,5 +1,5 @@
 git add .
 
-git commit -m "added download endpoint for v2"
+git commit -m "allowed global cors"
 
 git push origin main
