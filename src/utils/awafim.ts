@@ -17,6 +17,7 @@ export async function browseHTMLToJSON(htmlString: string) {
     const imgUrl = article.find("img.to-thumb").attr("src")?.trim();
     const year = article.find(".to-info .toi-year").text()?.trim();
     const duration = article.find(".to-info .toi-run").text()?.trim();
+    const movieType = duration[0] === "S" ? "Series" : "Movie";
     const country = article
       .find(".toi-countries i.fi")
       .attr("class")
@@ -34,6 +35,7 @@ export async function browseHTMLToJSON(htmlString: string) {
     const articleData = {
       id,
       imgUrl,
+      movieType,
       country,
       title,
       year,
@@ -86,6 +88,10 @@ export async function titleHTMLToJSON(htmlString: string) {
   });
 
   const related = await browseHTMLToJSON(htmlString);
+  let seriesDetails = {
+    seasons: [] as any[],
+    episodes: [] as any[],
+  };
 
   // Find all <article> elements and loop through them
   $("#main").each(function () {
@@ -124,13 +130,38 @@ export async function titleHTMLToJSON(htmlString: string) {
       ?.replace("-0-0", "-0-1")
       ?.replace("https://www.awafim.tv/titles/", `${HOST}/api/v2/download/`);
     const trailer = article.find(".lazy-yt-loader").attr("data-youtube-id");
+    article
+      .find(".title-seasons-list ul li span, .title-seasons-list ul li a")
+      .each((_, element) => {
+        const isCurrent = element.attribs.class.includes("active");
+        const e = $(element);
+        const num = e.text().trim().replace(/[^\d]/g, "");
+        const urlId = e.attr("href")?.trim().replaceAll(awaUrl, "");
+        const seas = { isCurrent, num, urlId };
+        seriesDetails.seasons.push(seas);
+      });
+
+    article
+      .find(".title-episodes-list ul li span, .title-episodes-list ul li a")
+      .each((_, element) => {
+        const isCurrent = element.attribs.class.includes("active");
+        const e = $(element);
+        const num = e.text().trim().replace(/[^\d]/g, "");
+        const urlId = e.attr("href")?.trim().replaceAll(awaUrl, "");
+        const ep = { isCurrent, num, urlId };
+        seriesDetails.episodes.push(ep);
+      });
+    // const movieType =
 
     // Construct JSON object for the current article
+    if (seriesDetails.seasons.length == 0 && seriesDetails.episodes.length == 0)
+      seriesDetails = undefined as any;
     const articleData = {
       imgUrl,
       title,
       desc,
       trailer,
+      seriesDetails,
       meta: {
         duration,
         year,

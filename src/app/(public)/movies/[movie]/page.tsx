@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { MovieCardProps } from "@/components/MovieCard";
@@ -10,6 +11,7 @@ export default function Page() {
 
   useEffect(() => {
     getMovieDetails();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function getMovieDetails() {
