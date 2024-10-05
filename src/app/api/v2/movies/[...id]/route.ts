@@ -9,8 +9,8 @@ export async function GET(
   _: NextRequest,
   { params }: { params: { id: string | string[] } }
 ) {
-  console.log(params);
-  const id = [params.id].flat().join("");
+  const id = [params.id].flat().join("/");
+  console.log(HOST + id);
 
   try {
     const data = await fetch(HOST + id);
