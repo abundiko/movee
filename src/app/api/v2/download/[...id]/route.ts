@@ -2,7 +2,7 @@ export const maxDuration = 30; // This function can run for a maximum of 5 secon
 
 import { downloadHTMLToJSON } from "@/utils/awafim";
 import { NextRequest, NextResponse } from "next/server";
-import { objectFromParams } from "../../movies/route";
+import { objectFromParams } from "@/functions";
 
 const HOST = "https://www.awafim.tv/titles";
 

@@ -1,5 +1,6 @@
 export const maxDuration = 30; // This function can run for a maximum of 5 seconds
 
+import { objectFromParams } from "@/functions";
 import { browseHTMLToJSON } from "@/utils/awafim";
 import { buildUrlQuery } from "@/utils/helpers";
 import { NextRequest, NextResponse } from "next/server";
@@ -19,14 +20,7 @@ export type AwaMovie = {
   postedAt: string;
 };
 
-export function objectFromParams<T>(p: URLSearchParams) {
-  const entries = p.entries() as unknown as [string, string];
-  const obj: any = {};
-  for (const [key, value] of entries) {
-    obj[key] = value;
-  }
-  return obj as T;
-}
+
 
 const HOST = "https://www.awafim.tv/browse";
 // ?q=&type=movie&country%5B%5D=UMI&country%5B%5D=USA&language%5B%5D=eng&year%5B%5D=2024
