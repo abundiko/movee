@@ -1,10 +1,20 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'img.awafim.tv',
+        port: '',
+      },
+    ],
+  },
     async headers() {
         return [
           {
             // Routes this applies to
             source: "/api/(.*)",
+            
             // Headers
             headers: [
               // Allow for specific domains to have access or * for all

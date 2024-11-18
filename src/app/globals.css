@@ -8,24 +8,129 @@
   --background-end-rgb: 255, 255, 255;
 }
 
-*{
-  transition: .4s;
+
+* {
+  scroll-behavior: smooth;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+@layer utilities {
+  .hero-card{
+    @apply p-2 bg-white/10 backdrop-blur-2xl border
+  }
+  .hero-card>*{
+    @apply w-full h-full
+  }
+  .animate, .animate *{
+    @apply transition-all duration-300
+  }
+  
+  .app-shadow-lg {
+    @apply shadow-[0_0_50px_10px_#00000022];
+  }
+  .app-shadow {
+    @apply shadow-[0_0_30px_10px_#00000011];
+  }
+  .app-container {
+    @apply px-4 sm:px-6 md:px-8 lg:px-10 xl:px-16 2xl:px-20;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 text-base rounded-xl animate;
+  }
+
+  .btn-primary {
+    @apply btn font-semibold bg-primary hover:bg-primaryDark text-lg py-2.5 hover:text-white;
+  }
+  .btn-gradient {
+    @apply btn font-semibold bg-gradient-to-r from-primary to-primaryLight text-lg py-2.5 hover:to-primaryDark hover:text-white
+  }
+  .btn-brand {
+    @apply btn font-semibold text-lg py-2.5 text-white bg-brand hover:bg-brand/90;
+  }
+  .btn-brand-gradient {
+    @apply btn font-semibold text-lg py-2.5 text-white bg-gradient-to-r from-brand to-brandLight hover:to-brandDark;
+  }
+  .btn-light {
+    @apply btn font-semibold bg-white hover:bg-neutral-100 text-lg py-2.5;
+  }
+  .btn-dark {
+    @apply btn font-semibold bg-black hover:bg-neutral-900 text-lg text-white py-2.5;
+  }
+  .btn-transparent {
+    @apply bg-transparent border text-base py-2 rounded-3xl inline-flex justify-center items-center text-primary gap-1;
+  }
+  .btn-primary-border {
+    @apply btn-border font-semibold text-lg py-2;
+  }
+  .delete-btn {
+    @apply btn gap-1.5 text-danger rounded-md hover:bg-red-100 px-1.5 text-base font-semibold;
+  }
+  .edit-btn {
+    @apply btn gap-1.5 text-primary rounded-md hover:bg-blue-100 px-1.5 text-base font-semibold;
+  }
+
+  .app-input {
+    @apply bg-neutral-50 w-full border border-neutral-100 outline-primary text-darker py-2.5 text-sm pe-3 rounded-lg read-only:opacity-70 read-only:pointer-events-none;
+  }
+  .app-select {
+    @apply bg-light w-full border border-neutral-100 outline-primary text-darker py-2.5  pe-3 rounded-lg;
+  }
+  .info-box {
+    @apply bg-[#00000011] rounded p-2 font-semibold w-full;
+  }
+  .skeleton {
+    @apply bg-[#00000022] rounded-md animate-pulse;
+  }
+  .pagination-button {
+    @apply flex items-center justify-center px-4 h-10 ms-0 leading-tight  bg-white border border-neutral-50 rounded-lg hover:bg-neutral-50 data-[active="true"]:text-light data-[active="true"]:bg-neutral-500 text-dark;
+  }
+  .avatar {
+    @apply !rounded-full aspect-square overflow-hidden object-cover;
+  }
+  .admin-side-link {
+    @apply flex gap-3 font-[500] items-center text-neutral-700 hover:text-primary p-2 rounded-md hover:bg-neutral-100 transition-colors duration-300;
+  }
+
+  .admin-side-link-logout {
+    @apply !text-red-800 hover:!text-red-700 p-2 rounded-md hover:!bg-red-50;
+  }
+
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+
+@media screen and (min-width: 650px) {
+  ::-webkit-scrollbar-track {
+    width: 8px;
+    height: 8px;
+    background-color: transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    background-color: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    width: 8px;
+    height: 8px;
+    background-color: #01010144;
+    border-radius: 5px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #010101;
+  }
+
+  .multi-range-slider .thumb .caption * {
+    display: none !important;
+  }
 }
