@@ -4,7 +4,31 @@ import { load } from "cheerio";
 const awaUrl = "https://www.awafim.tv/titles/";
 const HOST = process.env.HOST ?? "";
 
-export async function browseHTMLToJSON(htmlString: string) {
+export async function suggestionHTMLToJSON(htmlString: string) {
+  const $ = load(htmlString);
+  const articles: { title: string; movies: AwaMovie[] }[] = [];
+
+  // Find all <article> elements and loop through them
+  $("#suggestions .suggestions-list .suggestions-one").each(function () {
+    const article = $(this);
+
+    const title = article.find(".suggestions-title").text()?.trim();  
+    const movies = browseHTMLToJSON(article.html() ?? "");
+
+    // Construct JSON object for the current article
+    const articleData = {
+      title,
+      movies,
+    };
+
+    // Add the article data to the array
+    articles.push(articleData as any);
+  });
+
+  return articles;
+}
+
+export function browseHTMLToJSON(htmlString: string) {
   const $ = load(htmlString);
   const articles: AwaMovie[] = [];
 
@@ -87,7 +111,7 @@ export async function titleHTMLToJSON(htmlString: string) {
     details[key] = value;
   });
 
-  const related = await browseHTMLToJSON(htmlString);
+  const related = browseHTMLToJSON(htmlString);
   let seriesDetails = {
     seasons: [] as any[],
     episodes: [] as any[],
@@ -142,11 +166,18 @@ export async function titleHTMLToJSON(htmlString: string) {
       });
 
     article
-      .find(".title-episodes-list ul li span, .title-episodes-list ul li a")
+      .find(
+        ".title-episodes-list ul li>span:nth-child(1), .title-episodes-list ul li>a:nth-child(1)"
+      )
       .each((_, element) => {
         const isCurrent = element.attribs.class.includes("active");
         const e = $(element);
-        const num = e.text().trim().replace(/[^\d]/g, "");
+        const num = e
+          .contents()
+          .not("span")
+          .text()
+          .trim()
+          .replace(/[^\d]/g, "");
         const urlId = e.attr("href")?.trim().replaceAll(awaUrl, "");
         const ep = { isCurrent, num, urlId };
         seriesDetails.episodes.push(ep);

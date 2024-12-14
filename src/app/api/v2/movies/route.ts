@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
   try {
     const data = await fetch(HOST + pageQuery + buildUrlQuery(searchParams));
     const text = await data.text();
-    const json = await browseHTMLToJSON(text);
+    const json = browseHTMLToJSON(text);
     // return NextResponse.json({ success: true, data: text });
 
     return NextResponse.json({ success: true, data: json });
