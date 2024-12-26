@@ -1,5 +1,5 @@
 git add .
 
-git commit -m "redesigned landing page for movee app"
+git commit -m "added divine-only endpoint"
 
 git push origin main
