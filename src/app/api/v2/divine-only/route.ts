@@ -5,7 +5,7 @@ export async function GET() {
   const today = new Date();
   console.log({ today, specificDate });
 
-  if (today < specificDate)
+  if (today > specificDate)
     return NextResponse.json({
       success: "available",
     });
