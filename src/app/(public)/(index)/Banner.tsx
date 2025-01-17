@@ -1,4 +1,5 @@
 import FadeInText from "@/components/animation/FadeInText";
+import Link from "next/link";
 import { BiLogoPlayStore } from "react-icons/bi";
 import { FaAppStore } from "react-icons/fa";
 
@@ -53,13 +54,13 @@ export default function Banner() {
               enjoying your favourite tvshows for free
             </p>
             <div className="grid md:flex gap-4 grid-cols-2">
-              <button className="btn-dark md:px-6 px-2">
+              <Link href={"https://expo.dev/artifacts/eas/nnzCF4b1DkDjrxHhqnStTR.apk"} className="btn-dark md:px-6 px-2">
                 <BiLogoPlayStore className="text-3xl" />
                 <p className="text-start leading-4">
                   <span className="text-xs font-light">Get it on</span> <br />
                   <span>Google Play</span>
                 </p>
-              </button>
+              </Link>
               <button className="btn-dark md:px-6 px-2">
                 <FaAppStore className="text-3xl" />
                 <p className="text-start leading-4">
