@@ -27,7 +27,7 @@ export default function Hero() {
               Watch unlimited movies and TV shows anytime, anywhere. Stream your
               favorite content instantly without any subscription fees.
             </p>
-            <Link href={"/#Download"} className="btn-gradient px-10">
+            <Link href={"https://expo.dev/artifacts/eas/nnzCF4b1DkDjrxHhqnStTR.apk"} className="btn-gradient px-10">
               Get The app
             </Link>
           </div>
